@@ -1,86 +1,106 @@
 'use client'
 
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, Search, UserPlus, LogIn, X, PlusCircle } from 'lucide-react'
-import { SITE_CONFIG } from '@/lib/site-config'
-import { globalContent } from '@/editable/content/global.content'
-import { getVisualPreset, visualSystem } from '@/editable/theme/visual-system'
+import { LogIn, Menu, PlusCircle, Search, UserPlus, X } from 'lucide-react'
+import { slot4BrandConfig } from '@/editable/theme/brand.config'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
+function BrandMark() {
+  return (
+    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+      <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_140deg,var(--slot4-violet),var(--slot4-violet)_35%,transparent_35%,transparent_55%,var(--slot4-violet)_55%,var(--slot4-violet)_88%,transparent_88%)]" />
+      <span className="absolute left-[21px] top-[12px] h-2.5 w-2.5 rounded-full bg-[var(--slot4-cyan)] shadow-[0_0_18px_var(--slot4-cyan)]" />
+      <span className="absolute right-[10px] top-[9px] h-1.5 w-1.5 rounded-full bg-[var(--slot4-cyan)]" />
+    </span>
+  )
+}
+
 export function EditableNavbar() {
-  const preset = getVisualPreset(visualSystem.recommendedPreset as any)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const { session, logout } = useEditableLocalAuthSession()
-  const navVars = { '--editable-nav-bg': preset.colors.background, '--editable-nav-text': preset.colors.foreground, '--editable-nav-active': preset.colors.foreground, '--editable-nav-active-text': preset.colors.background, '--editable-cta-bg': preset.colors.foreground, '--editable-cta-text': preset.colors.background, '--editable-search-bg': preset.colors.surface, '--editable-border': `${preset.colors.muted}33`, '--editable-container': '1440px' } as CSSProperties
-  const navItems = useMemo(
-    () => SITE_CONFIG.tasks.filter((task) => task.enabled).map((task) => ({ label: task.label, href: task.route })),
-    []
-  )
+  const navItems = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
+    { label: 'Image', href: '/image' },
+  ]
 
   return (
-    <header style={navVars} className="sticky top-0 z-50 border-b border-[var(--editable-border)] bg-[var(--editable-nav-bg)]/92 text-[var(--editable-nav-text)] backdrop-blur-2xl">
-      <nav className="mx-auto flex min-h-[88px] w-full max-w-[var(--editable-container)] items-center gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#07050d]/90 text-white backdrop-blur-2xl">
+      <nav className="mx-auto flex min-h-[78px] w-full max-w-[1280px] items-center gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex shrink-0 items-center gap-3">
-          <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.4rem] border border-[var(--editable-border)] bg-white shadow-sm transition-transform group-hover:-rotate-2">
-            <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-11 w-11 object-contain" />
-          </span>
-          <span className="hidden min-w-0 sm:block">
-            <span className="block max-w-[180px] truncate text-sm font-black tracking-[-0.03em]">{SITE_CONFIG.name}</span>
-            <span className="block max-w-[180px] truncate text-[11px] font-bold uppercase tracking-[0.18em] opacity-55">{globalContent.nav?.tagline || SITE_CONFIG.tagline}</span>
-          </span>
+          <BrandMark />
+          <span className="max-w-[180px] truncate text-2xl font-black tracking-normal">{slot4BrandConfig.siteName}</span>
         </Link>
 
-        <form action="/search" className="mx-auto hidden min-w-0 flex-1 justify-center md:flex">
-          <label className="relative flex w-full max-w-xl items-center rounded-full border border-[var(--editable-border)] bg-[var(--editable-search-bg)] px-4 py-3 shadow-sm">
-            <Search className="h-4 w-4 opacity-55" />
-            <input name="q" type="search" placeholder={'Search posts'} className="min-w-0 flex-1 bg-transparent px-3 text-sm font-semibold outline-none placeholder:text-current/45" />
-          </label>
-        </form>
-
-        <div className="hidden items-center gap-2 lg:flex">
-          {navItems.slice(0, 4).map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
+        <div className="mx-auto hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => {
+            const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(`${item.href}/`))
             return (
-              <Link key={item.href} href={item.href} className={`rounded-full px-4 py-2 text-sm font-black transition ${active ? 'bg-[var(--editable-nav-active)] text-[var(--editable-nav-active-text)]' : 'hover:bg-black/5'}`}>
+              <Link
+                key={`${item.label}-${item.href}`}
+                href={item.href}
+                className={`inline-flex items-center gap-1 rounded-xl px-3.5 py-2 text-sm font-bold transition ${active ? 'text-[var(--slot4-cyan)]' : 'text-white/88 hover:text-[var(--slot4-cyan)]'}`}
+              >
                 {item.label}
               </Link>
             )
           })}
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <div className="ml-auto hidden shrink-0 items-center gap-4 md:flex">
           {session ? (
             <>
-              <Link href="/create" className="hidden items-center gap-2 rounded-full bg-[var(--editable-cta-bg)] px-4 py-2.5 text-sm font-black text-[var(--editable-cta-text)] shadow-sm sm:inline-flex"><PlusCircle className="h-4 w-4" /> Create</Link>
-              <button type="button" onClick={logout} className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-black hover:bg-black/5 sm:inline-flex">Logout</button>
+              <Link href="/create" className="inline-flex h-12 items-center gap-2 rounded-[0.65rem] border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-5 text-sm font-bold text-white shadow-[0_0_24px_rgba(0,240,200,0.18)]">
+                <PlusCircle className="h-4 w-4" /> Create
+              </Link>
+              <button type="button" onClick={logout} className="h-12 rounded-[0.65rem] bg-[#1a1a1d] px-5 text-sm font-bold text-white transition hover:text-[var(--slot4-cyan)]">
+                Logout
+              </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-black hover:bg-black/5 sm:inline-flex"><LogIn className="h-4 w-4" /> Login</Link>
-              <Link href="/signup" className="hidden items-center gap-2 rounded-full bg-[var(--editable-cta-bg)] px-4 py-2.5 text-sm font-black text-[var(--editable-cta-text)] shadow-sm sm:inline-flex"><UserPlus className="h-4 w-4" /> Sign up</Link>
+              <Link href="/login" className="inline-flex h-12 items-center gap-2 rounded-[0.65rem] bg-[#1a1a1d] px-5 text-sm font-bold text-white shadow-[inset_-2px_0_0_rgba(0,240,200,0.75)] transition hover:text-[var(--slot4-cyan)]">
+                Sign in
+              </Link>
+              <Link href="/signup" className="inline-flex h-12 items-center gap-2 rounded-[0.65rem] border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-6 text-sm font-bold text-white shadow-[0_0_26px_rgba(0,240,200,0.22)]">
+                Sign up
+              </Link>
             </>
           )}
-          <button type="button" onClick={() => setOpen((value) => !value)} className="rounded-full border border-[var(--editable-border)] bg-white p-2 lg:hidden" aria-label="Toggle menu">
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
+
+        <button type="button" onClick={() => setOpen((value) => !value)} className="ml-auto rounded-xl border border-white/10 bg-white/5 p-2.5 md:hidden" aria-label="Toggle menu">
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </nav>
 
       {open ? (
-        <div className="border-t border-[var(--editable-border)] bg-[var(--editable-nav-bg)] px-4 py-4 lg:hidden">
-          <form action="/search" className="mb-4 flex rounded-2xl border border-[var(--editable-border)] bg-[var(--editable-search-bg)] px-3 py-2">
-            <Search className="mt-1 h-4 w-4 opacity-55" />
-            <input name="q" type="search" placeholder="Search posts" className="min-w-0 flex-1 bg-transparent px-3 text-sm outline-none" />
+        <div className="border-t border-white/10 bg-[#07050d] px-4 py-4 md:hidden">
+          <form action="/search" className="mb-4 flex rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2">
+            <Search className="mt-1 h-4 w-4 text-white/55" />
+            <input name="q" type="search" placeholder="Search portfolios" className="min-w-0 flex-1 bg-transparent px-3 text-sm text-white outline-none placeholder:text-white/45" />
           </form>
           <div className="grid gap-2">
-            {[{ label: 'Home', href: '/' }, ...navItems, { label: 'Contact', href: '/contact' }, ...(session ? [{ label: 'Create', href: '/create' }] : [{ label: 'Login', href: '/login' }, { label: 'Sign up', href: '/signup' }])].map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="rounded-2xl border border-[var(--editable-border)] bg-white px-4 py-3 text-sm font-black">
+            {navItems.map((item) => (
+              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} className="rounded-xl border border-white/10 bg-white/[0.055] px-4 py-3 text-sm font-bold text-white">
                 {item.label}
               </Link>
             ))}
+            {session ? (
+              <>
+                <Link href="/create" onClick={() => setOpen(false)} className="rounded-xl border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-4 py-3 text-sm font-bold text-white">Create</Link>
+                <button type="button" onClick={() => { logout(); setOpen(false) }} className="rounded-xl border border-white/10 bg-white/[0.055] px-4 py-3 text-left text-sm font-bold text-white">Logout</button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setOpen(false)} className="rounded-xl border border-white/10 bg-white/[0.055] px-4 py-3 text-sm font-bold text-white"><LogIn className="mr-2 inline h-4 w-4" /> Sign in</Link>
+                <Link href="/signup" onClick={() => setOpen(false)} className="rounded-xl border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-4 py-3 text-sm font-bold text-white"><UserPlus className="mr-2 inline h-4 w-4" /> Sign up</Link>
+              </>
+            )}
           </div>
         </div>
       ) : null}
