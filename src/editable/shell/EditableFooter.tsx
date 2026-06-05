@@ -1,58 +1,64 @@
 'use client'
 
 import Link from 'next/link'
-import type { CSSProperties } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { CheckCheck } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
-import { globalContent } from '@/editable/content/global.content'
+import { slot4BrandConfig } from '@/editable/theme/brand.config'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
+function FooterLogo() {
+  return <span className="absolute -left-28 top-4 h-[420px] w-[420px] rounded-full border-[72px] border-white/[0.055]" />
+}
+
 export function EditableFooter() {
-  const footerVars = { '--editable-footer-bg': 'var(--editable-page-bg, #fffaf3)', '--editable-footer-text': 'var(--editable-page-text, #241915)' } as CSSProperties
-  const taskLinks = SITE_CONFIG.tasks.filter((task) => task.enabled)
-  const year = new Date().getFullYear()
+  const taskLinks = SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile')
   const { session, logout } = useEditableLocalAuthSession()
+  const siteLinks = [
+    ['Login', '/login'],
+    ['Register', '/signup'],
+    ['Contact Us', '/contact'],
+  ]
 
   return (
-    <footer style={footerVars} className="border-t border-[var(--editable-border)] bg-[var(--editable-footer-bg)] text-[var(--editable-footer-text)]">
-      <div className="mx-auto grid max-w-[var(--editable-container)] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#030008] text-white">
+      <div className="h-1 bg-[linear-gradient(90deg,var(--slot4-blue),var(--slot4-magenta),var(--slot4-violet))]" />
+      <FooterLogo />
+      <div className="pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(0,240,200,0.28),transparent_68%)] blur-xl" />
+      <div className="relative mx-auto grid max-w-[1280px] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.8fr_0.8fr] lg:px-8">
         <div>
-          <Link href="/" className="inline-flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-[var(--editable-border)] bg-white">
-              <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-9 w-9 object-contain" />
-            </span>
-            <span className="text-lg font-black tracking-[-0.04em]">{SITE_CONFIG.name}</span>
+          <h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-normal sm:text-5xl">
+            Insider visual advice from <span className="editable-gradient-text font-black">top-notch {slot4BrandConfig.siteName}?</span>
+          </h2>
+          <p className="mt-6 max-w-lg text-base font-semibold leading-8 text-white/82">Discover image-led portfolios, creator profiles, and practical visual notes through one polished browsing experience.</p>
+          <Link href="/contact" className="mt-8 inline-flex rounded-[0.65rem] border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-6 py-3 text-sm font-bold text-white">
+            Request Demo
           </Link>
-          <p className="mt-4 max-w-md text-sm leading-7 opacity-70">{globalContent.footer?.description || SITE_CONFIG.description}</p>
         </div>
 
-        <div>
-          <h3 className="text-xs font-black uppercase tracking-[0.22em] opacity-55">Explore</h3>
-          <div className="mt-4 grid gap-2">
-            {taskLinks.map((task) => (
-              <Link key={task.key} href={task.route} className="inline-flex items-center gap-2 text-sm font-bold opacity-75 hover:opacity-100">
-                {task.label} <ArrowUpRight className="h-3.5 w-3.5" />
+        <div className="rounded-[1.1rem] bg-[#1a1a1d] p-6">
+          <h3 className="text-2xl font-black">Resources</h3>
+          <div className="mt-5 grid gap-4">
+            {taskLinks.slice(0, 5).map((task) => (
+              <Link key={task.key} href={task.route} className="inline-flex items-center gap-3 text-sm font-bold text-white/48 transition hover:text-[var(--slot4-cyan)]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[radial-gradient(circle_at_70%_20%,rgba(0,240,200,0.28),rgba(116,39,255,0.24))] text-white"><CheckCheck className="h-4 w-4" /></span>
+                {task.label}
               </Link>
             ))}
           </div>
         </div>
 
-        <div>
-          <h3 className="text-xs font-black uppercase tracking-[0.22em] opacity-55">Site</h3>
-          <div className="mt-4 grid gap-2">
-            {[
-              ['About', '/about'],
-              ['Contact', '/contact'],
-              ...(session ? [['Create', '/create']] : [['Login', '/login'], ['Sign up', '/signup']]),
-            ].map(([label, href]) => (
-              <Link key={href} href={href} className="text-sm font-bold opacity-75 hover:opacity-100">{label}</Link>
+        <div className="rounded-[1.1rem] bg-[#1a1a1d] p-6">
+          <h3 className="text-2xl font-black">Quick Links</h3>
+          <div className="mt-5 grid gap-4">
+            {siteLinks.map(([label, href]) => (
+              <Link key={label} href={href} className="inline-flex items-center gap-3 text-sm font-bold text-white/48 transition hover:text-[var(--slot4-cyan)]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[radial-gradient(circle_at_70%_20%,rgba(0,240,200,0.28),rgba(116,39,255,0.24))] text-white"><CheckCheck className="h-4 w-4" /></span>
+                {label}
+              </Link>
             ))}
-            {session ? <button type="button" onClick={logout} className="text-left text-sm font-bold opacity-75 hover:opacity-100">Logout</button> : null}
+            {session ? <button type="button" onClick={logout} className="inline-flex items-center gap-3 text-left text-sm font-bold text-white/48 transition hover:text-[var(--slot4-cyan)]"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-[radial-gradient(circle_at_70%_20%,rgba(0,240,200,0.28),rgba(116,39,255,0.24))] text-white"><CheckCheck className="h-4 w-4" /></span>Logout</button> : null}
           </div>
         </div>
-      </div>
-      <div className="border-t border-[var(--editable-border)] px-4 py-5 text-center text-xs font-bold opacity-55">
-        © {year} {SITE_CONFIG.name}. All rights reserved.
       </div>
     </footer>
   )

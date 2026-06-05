@@ -6,9 +6,9 @@ const { recipe } = getFactoryState()
 const productKind = getProductKind(recipe)
 
 export const slot4BrandConfig = {
-  siteName: siteIdentity.name,
-  tagline: siteIdentity.tagline,
-  domain: siteIdentity.domain,
+  siteName: 'lotologyy',
+  tagline: 'Visual portfolios and profile discovery',
+  domain: 'lotologyy.com',
   baseUrl: siteIdentity.url,
   productKind,
   ogImage: siteIdentity.ogImage,
