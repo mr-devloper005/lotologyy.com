@@ -1,23 +1,32 @@
 import type { CSSProperties } from 'react'
 
 export const editableRootStyle = {
-  '--slot4-page-bg': '#fff9f2',
-  '--slot4-page-text': '#111111',
-  '--slot4-panel-bg': '#fff3e8',
-  '--slot4-surface-bg': '#ffffff',
-  '--slot4-muted-text': '#4f463f',
-  '--slot4-soft-muted-text': '#6b6258',
-  '--slot4-accent': '#ff6600',
-  '--slot4-accent-fill': '#ff6600',
-  '--slot4-accent-soft': '#d1e0ff',
-  '--slot4-dark-bg': '#111111',
+  '--slot4-page-bg': '#030008',
+  '--slot4-page-text': '#ffffff',
+  '--slot4-panel-bg': '#121016',
+  '--slot4-surface-bg': '#1a1a1d',
+  '--slot4-muted-text': '#b8b4c4',
+  '--slot4-soft-muted-text': '#7f7a8c',
+  '--slot4-accent': '#00f0c8',
+  '--slot4-accent-fill': '#00f0c8',
+  '--slot4-accent-soft': '#6c35ff',
+  '--slot4-dark-bg': '#05030a',
   '--slot4-dark-text': '#ffffff',
-  '--slot4-media-bg': '#e9e2da',
-  '--slot4-cream': '#fdf1e5',
-  '--slot4-warm': '#fff9f2',
-  '--slot4-lavender': '#d1e0ff',
-  '--slot4-gray': '#f6f6f6',
-  '--slot4-body-gradient': 'linear-gradient(180deg, #fdf1e5 0%, #fff9f2 38%, #f6f6f6 100%)',
+  '--slot4-media-bg': '#111827',
+  '--slot4-cream': '#06030c',
+  '--slot4-warm': '#08040f',
+  '--slot4-lavender': '#10071d',
+  '--slot4-gray': '#0b0712',
+  '--slot4-cyan': '#00f0c8',
+  '--slot4-blue': '#2995ff',
+  '--slot4-violet': '#7427ff',
+  '--slot4-magenta': '#e200ff',
+  '--slot4-card': '#1a1a1d',
+  '--slot4-border': 'rgba(255,255,255,0.13)',
+  '--slot4-glow': '0 30px 100px rgba(0, 240, 200, 0.16)',
+  '--slot4-gradient': 'linear-gradient(100deg, #7228ff 0%, #2995ff 48%, #00f0c8 100%)',
+  '--slot4-body-gradient':
+    'radial-gradient(circle at 8% 12%, rgba(0,240,200,0.28), transparent 18%), radial-gradient(circle at 85% 28%, rgba(41,149,255,0.27), transparent 24%), radial-gradient(circle at 18% 72%, rgba(226,0,255,0.18), transparent 22%), linear-gradient(180deg, #030008 0%, #05020a 45%, #030008 100%)',
 } as CSSProperties
 
 export const editablePalette = {
@@ -40,56 +49,58 @@ export const editablePalette = {
   warmBg: 'bg-[var(--slot4-warm)]',
   lavenderBg: 'bg-[var(--slot4-lavender)]',
   grayBg: 'bg-[var(--slot4-gray)]',
-  border: 'border-black/[0.06]',
+  border: 'border-white/10',
   darkBorder: 'border-white/10',
-  shadow: 'shadow-[0_12px_40px_rgba(0,0,0,0.08)]',
-  shadowStrong: 'shadow-[0_18px_70px_rgba(0,0,0,0.14)]',
-  overlay: 'bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.62))]',
+  shadow: 'shadow-[0_22px_70px_rgba(0,0,0,0.35)]',
+  shadowStrong: 'shadow-[0_30px_110px_rgba(0,240,200,0.15)]',
+  overlay: 'bg-[linear-gradient(180deg,rgba(3,0,8,0.04),rgba(3,0,8,0.85))]',
 } as const
 
 export const editableDesignContract = {
   shell: {
     page: `min-h-screen ${editablePalette.pageBg} ${editablePalette.pageText}`,
-    section: 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
-    sectionY: 'py-14 sm:py-16 lg:py-20',
+    section: 'mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8',
+    sectionY: 'py-16 sm:py-20 lg:py-24',
   },
   layout: {
     safeGrid: 'grid gap-6 md:grid-cols-2 xl:grid-cols-3',
-    featureGrid: 'grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center',
+    featureGrid: 'grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center',
     rail: 'flex snap-x gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-    minRailCard: 'w-[140px] shrink-0 snap-start sm:w-[160px]',
+    minRailCard: 'w-[260px] shrink-0 snap-start sm:w-[300px]',
   },
   type: {
-    eyebrow: 'text-xs font-extrabold uppercase tracking-[0.18em]',
-    heroTitle: 'text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.25rem]',
-    sectionTitle: 'text-3xl font-extrabold tracking-tight sm:text-4xl',
-    body: 'text-base leading-relaxed',
+    eyebrow: 'text-xs font-black uppercase tracking-[0.18em]',
+    heroTitle: 'text-5xl font-semibold leading-[1.05] tracking-normal sm:text-6xl lg:text-[5.1rem]',
+    sectionTitle: 'text-4xl font-semibold tracking-normal sm:text-5xl',
+    body: 'text-base leading-8',
   },
   surface: {
-    card: `rounded-2xl border ${editablePalette.border} ${editablePalette.surfaceBg} ${editablePalette.shadow}`,
-    soft: `rounded-2xl border ${editablePalette.border} ${editablePalette.surfaceBg}`,
-    dark: `rounded-2xl ${editablePalette.darkBg} ${editablePalette.darkText} ${editablePalette.shadowStrong}`,
+    card: `rounded-[1.65rem] border ${editablePalette.border} bg-[var(--slot4-card)] ${editablePalette.shadow}`,
+    soft: `rounded-[1.65rem] border ${editablePalette.border} bg-white/[0.055]`,
+    dark: `rounded-[1.8rem] border ${editablePalette.darkBorder} bg-black/50 ${editablePalette.darkText} ${editablePalette.shadowStrong}`,
   },
   button: {
-    primary: `inline-flex items-center justify-center rounded-full ${editablePalette.darkBg} px-8 py-3.5 text-sm font-semibold text-white transition hover:opacity-90`,
-    secondary: `inline-flex items-center justify-center rounded-full border ${editablePalette.border} ${editablePalette.surfaceBg} px-8 py-3.5 text-sm font-semibold ${editablePalette.surfaceText} transition hover:bg-black/[0.03]`,
-    accent: `inline-flex items-center justify-center rounded-full ${editablePalette.accentBg} px-8 py-3.5 text-sm font-semibold text-white transition hover:opacity-90`,
+    primary:
+      'inline-flex items-center justify-center rounded-[0.65rem] border border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] px-7 py-3.5 text-sm font-bold text-white shadow-[0_0_30px_rgba(0,240,200,0.24)] transition hover:-translate-y-0.5 hover:brightness-110',
+    secondary:
+      'inline-flex items-center justify-center rounded-[0.65rem] border border-white/10 bg-[#1a1a1d] px-7 py-3.5 text-sm font-bold text-white transition hover:border-[var(--slot4-cyan)] hover:text-[var(--slot4-cyan)]',
+    accent:
+      'inline-flex items-center justify-center rounded-[0.65rem] border border-[var(--slot4-violet)] bg-[var(--slot4-gradient)] px-7 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5',
   },
   media: {
-    frame: `relative overflow-hidden rounded-xl ${editablePalette.mediaBg}`,
-    ratio: 'aspect-[2/3]',
+    frame: `relative overflow-hidden rounded-[1.2rem] ${editablePalette.mediaBg}`,
+    ratio: 'aspect-[4/3]',
   },
   motion: {
-    lift: 'transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_55px_rgba(0,0,0,0.14)]',
+    lift: 'transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(0,240,200,0.14)]',
     fade: 'transition duration-300 hover:opacity-80',
   },
 } as const
 
 export const aiLayoutRules = [
-  'Change the full site color palette in editableRootStyle first; all homepage sections consume those CSS variables.',
-  'Keep page structure in src/editable/sections/HomeSections.tsx so AI can redesign the whole home experience in one file.',
-  'Use wide readable grids; never create skinny columns for paragraphs or cards.',
-  'Use horizontal rails for dense post browsing, like the MysteryCoder reference layout.',
-  'Keep dynamic post fetching intact; do not replace posts with mock arrays.',
+  'Keep all visual changes inside src/editable and preserve data fetching in core files.',
+  'Use dark neon sections, image-led cards, glass panels, and gradient CTA controls.',
+  'Render posts with safe fallbacks for missing images, summaries, tags, and categories.',
+  'Use varied post card formats: featured, compact, horizontal, editorial, and image-first.',
   'Use postHref() for all post links so task-specific routes keep working.',
 ] as const
