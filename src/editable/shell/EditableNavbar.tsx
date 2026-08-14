@@ -9,10 +9,8 @@ import { useEditableLocalAuthSession } from '@/editable/components/EditableLocal
 
 function BrandMark() {
   return (
-    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center">
-      <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_140deg,var(--slot4-violet),var(--slot4-violet)_35%,transparent_35%,transparent_55%,var(--slot4-violet)_55%,var(--slot4-violet)_88%,transparent_88%)]" />
-      <span className="absolute left-[21px] top-[12px] h-2.5 w-2.5 rounded-full bg-[var(--slot4-cyan)] shadow-[0_0_18px_var(--slot4-cyan)]" />
-      <span className="absolute right-[10px] top-[9px] h-1.5 w-1.5 rounded-full bg-[var(--slot4-cyan)]" />
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full">
+      <img src="/favicon.png?v=20260606" alt={`${slot4BrandConfig.siteName} logo`} className="h-full w-full object-contain" />
     </span>
   )
 }

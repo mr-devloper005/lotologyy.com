@@ -84,18 +84,38 @@ const sanitizeHtml = (html: string) => hardenLinks(html
   .replace(/\s+on\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
   .replace(/(href|src)=(['"])javascript:[\s\S]*?\2/gi, '$1="#"'))
 
+const stripHtml = (value: string) => value
+  .replace(/<[^>]*>/g, '')
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/\s+/g, ' ')
+  .trim()
+
+const decodeEntities = (value: string) => value
+  .replace(/&amp;/gi, '&')
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/&nbsp;/gi, ' ')
+
 const formatPlainText = (raw: string) => {
   const value = raw.trim()
   if (!value) return ''
   if (/<[a-z][\s\S]*>/i.test(value)) return sanitizeHtml(linkifyMarkdown(value))
-  return value
+  const decoded = decodeEntities(value)
+  return decoded
     .split(/\n{2,}/)
     .map((part) => `<p>${linkifyText(escapeHtml(part).replace(/\n/g, '<br />'))}</p>`)
     .join('')
 }
 
-const summaryText = (post: SitePost) => post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || ''
-const categoryOf = (post: SitePost, fallback: string) => asText(getContent(post).category) || post.tags?.[0] || fallback
+const summaryText = (post: SitePost) => stripHtml(post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || '')
+const categoryOf = (post: SitePost, fallback: string) => stripHtml(asText(getContent(post).category) || post.tags?.[0] || fallback)
 const mapSrcFor = (post: SitePost) => {
   const address = getField(post, ['address', 'location', 'city'])
   const lat = getField(post, ['lat', 'latitude'])
@@ -170,7 +190,6 @@ function ListingDetail({ post, related }: { post: SitePost; related: SitePost[] 
             <div>
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[var(--detail-accent)]">Profile showcase</p>
               <h1 className="mt-3 text-4xl font-black leading-tight tracking-normal sm:text-6xl">{post.title}</h1>
-              <p className="mt-5 max-w-3xl text-base leading-8 opacity-70">{summaryText(post)}</p>
             </div>
           </div>
           <InfoGrid items={[['Location', address, MapPin], ['Phone', phone, Phone], ['Email', email, Mail], ['Website', website, Globe2]]} />
@@ -237,7 +256,6 @@ function ImageDetail({ post, related }: { post: SitePost; related: SitePost[] })
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-[var(--slot4-cyan)] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#030008]"><Camera className="h-4 w-4" /> Image story</div>
               <h1 className="mt-7 max-w-3xl text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">{post.title}</h1>
-              {summaryText(post) ? <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-white/68">{summaryText(post)}</p> : null}
             </div>
             <BodyContent post={post} compact />
           </article>
@@ -271,7 +289,6 @@ function BookmarkDetail({ post, related }: { post: SitePost; related: SitePost[]
         <BackLink task="sbm" />
         <div className="mt-10 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-[var(--detail-text)] text-[var(--detail-bg)]"><Bookmark className="h-9 w-9" /></div>
         <h1 className="mt-7 text-4xl font-black leading-tight tracking-normal sm:text-6xl">{post.title}</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-9 opacity-70">{summaryText(post)}</p>
         {website ? <Link href={website} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--detail-text)] px-5 py-3 text-sm font-black text-[var(--detail-bg)]">Open visual source <ExternalLink className="h-4 w-4" /></Link> : null}
         <BodyContent post={post} />
       </article>

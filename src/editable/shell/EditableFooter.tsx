@@ -7,7 +7,11 @@ import { slot4BrandConfig } from '@/editable/theme/brand.config'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
 function FooterLogo() {
-  return <span className="absolute -left-28 top-4 h-[420px] w-[420px] rounded-full border-[72px] border-white/[0.055]" />
+  return (
+    <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full">
+      <img src="/favicon.png?v=20260606" alt={`${SITE_CONFIG.name} logo`} className="h-full w-full object-contain" />
+    </span>
+  )
 }
 
 export function EditableFooter() {
@@ -22,11 +26,14 @@ export function EditableFooter() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-[#030008] text-white">
       <div className="h-1 bg-[linear-gradient(90deg,var(--slot4-blue),var(--slot4-magenta),var(--slot4-violet))]" />
-      <FooterLogo />
       <div className="pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(0,240,200,0.28),transparent_68%)] blur-xl" />
       <div className="relative mx-auto grid max-w-[1280px] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.8fr_0.8fr] lg:px-8">
         <div>
-          <h2 className="max-w-xl text-4xl font-semibold leading-tight tracking-normal sm:text-5xl">
+          <Link href="/" className="inline-flex items-center gap-3">
+            <FooterLogo />
+            <span className="text-4xl font-black tracking-normal">{slot4BrandConfig.siteName}</span>
+          </Link>
+          <h2 className="mt-6 max-w-xl text-4xl font-semibold leading-tight tracking-normal sm:text-5xl">
             Insider visual advice from <span className="editable-gradient-text font-black">top-notch {slot4BrandConfig.siteName}?</span>
           </h2>
           <p className="mt-6 max-w-lg text-base font-semibold leading-8 text-white/82">Discover image-led portfolios, creator profiles, and practical visual notes through one polished browsing experience.</p>
