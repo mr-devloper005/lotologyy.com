@@ -2,7 +2,7 @@
 
 import { FormEvent, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, FileText, ImageIcon, Lock, PlusCircle, Send, Sparkles } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Lock, Send } from 'lucide-react'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
@@ -22,18 +22,6 @@ type DraftPost = {
 
 const STORE_KEY = 'slot4:created-posts'
 
-const taskIcon: Record<string, typeof FileText> = {
-  article: FileText,
-  listing: Sparkles,
-  classified: PlusCircle,
-  image: ImageIcon,
-  profile: Sparkles,
-  pdf: FileText,
-  sbm: ArrowRight,
-}
-
-const visualTaskKeys = new Set<TaskKey>(['image', 'profile'])
-
 const fieldClass = 'rounded-2xl border border-white/10 bg-[#030008] px-4 py-3 text-sm font-bold text-white outline-none transition placeholder:text-white/35 focus:border-[var(--slot4-cyan)]'
 
 const saveDraft = (draft: DraftPost) => {
@@ -48,8 +36,8 @@ const saveDraft = (draft: DraftPost) => {
 
 export default function CreatePage() {
   const { session } = useEditableLocalAuthSession()
-  const enabledTasks = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && visualTaskKeys.has(task.key as TaskKey)), [])
-  const [task, setTask] = useState<TaskKey>((enabledTasks[0]?.key || 'image') as TaskKey)
+  const enabledTasks = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled), [])
+  const [task] = useState<TaskKey>((enabledTasks[0]?.key || 'image') as TaskKey)
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('')
   const [summary, setSummary] = useState('')
@@ -115,19 +103,6 @@ export default function CreatePage() {
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[var(--slot4-cyan)]">{pagesContent.create.hero.badge}</p>
               <h1 className="mt-5 text-5xl font-black leading-[0.92] tracking-[-0.08em] sm:text-7xl">{pagesContent.create.hero.title}</h1>
               <p className="mt-6 max-w-xl text-base font-semibold leading-8 text-white/68">{pagesContent.create.hero.description}</p>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {enabledTasks.map((item) => {
-                  const Icon = taskIcon[item.key] || FileText
-                  const active = item.key === task
-                  return (
-                    <button key={item.key} type="button" onClick={() => setTask(item.key)} className={`rounded-2xl border p-4 text-left transition ${active ? 'border-[var(--slot4-cyan)] bg-[var(--slot4-gradient)] text-white' : 'border-white/10 bg-white/[0.055] hover:-translate-y-0.5 hover:border-[var(--slot4-cyan)]'}`}>
-                      <Icon className="h-5 w-5" />
-                      <span className="mt-3 block text-sm font-black">{item.label}</span>
-                      <span className="mt-1 block text-xs font-semibold text-white/58">{item.description}</span>
-                    </button>
-                  )
-                })}
-              </div>
             </aside>
 
             <form onSubmit={submit} className="rounded-[2.2rem] border border-white/10 bg-[#1a1a1d]/78 p-5 sm:p-7">
